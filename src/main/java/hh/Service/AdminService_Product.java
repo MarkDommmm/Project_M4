@@ -33,6 +33,8 @@ public class AdminService_Product implements IGenericService<Product, Integer> {
                 p.setId(rs.getInt("id"));
                 p.setNameproduct(rs.getString("nameproduct"));
                 p.setImage(rs.getString("image"));
+                p.setVideo(rs.getString("video"));
+                p.setIdm_id(rs.getInt("idm_id"));
                 p.setPrice(rs.getFloat("price"));
                 p.setStock(rs.getInt("stock"));
                 p.setDate(rs.getDate("date"));
@@ -64,7 +66,6 @@ public class AdminService_Product implements IGenericService<Product, Integer> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         try {
             if (product.getId() == 0) {
                 // thêm moi

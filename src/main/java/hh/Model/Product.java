@@ -9,6 +9,8 @@ public class Product {
     private int id;
     private String nameproduct;
     private String image;
+    private String video;
+    private  int idm_id;
     private float price;
     private int stock;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -28,6 +30,35 @@ public class Product {
         this.date = date;
         this.description = description;
         this.status = status;
+    }
+
+    public Product(int id, String nameproduct, String image, String video, int idm_id, float price, int stock, Date date, String description, boolean status) {
+        this.id = id;
+        this.nameproduct = nameproduct;
+        this.image = image;
+        this.video = video;
+        this.idm_id = idm_id;
+        this.price = price;
+        this.stock = stock;
+        this.date = date;
+        this.description = description;
+        this.status = status;
+    }
+
+    public int getIdm_id() {
+        return idm_id;
+    }
+
+    public void setIdm_id(int idm_id) {
+        this.idm_id = idm_id;
+    }
+
+    public String getVideo() {
+        return video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
     }
 
     public Date getDate() {

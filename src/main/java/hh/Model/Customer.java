@@ -1,12 +1,21 @@
 package hh.Model;
 
+import hh.Service.AdminService_User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+@Component
 public class Customer {
+    @Autowired
+    private  AdminService_User adminServiceUser;
     private int id;
     private String fullname;
 
@@ -163,4 +172,6 @@ public class Customer {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+
 }

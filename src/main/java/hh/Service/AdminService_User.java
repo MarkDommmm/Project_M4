@@ -4,6 +4,9 @@ import hh.Model.Customer;
 import hh.Model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -15,6 +18,8 @@ public class AdminService_User implements IGenericService<Customer, Integer> {
 
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private AdminService_User adminServiceUser;
 
     @Override
     public List<Customer> findall() {
@@ -250,4 +255,26 @@ public class AdminService_User implements IGenericService<Customer, Integer> {
         }
         return c;
     }
+
+    public boolean checkValidate(Customer customer ) {
+        List<Customer> customerList = adminServiceUser.findall();
+
+        for (Customer c : customerList) {
+            if (customer.getUsername().equals(c.getUsername())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean check_name_pass(Customer customer ) {
+        if (customer.getUsername().trim().equals("") || customer.getUsername().length() < 6 || customer.getUsername().contains(" ")) {
+            return true;
+        }
+        if (customer.getPassword().length() < 6 || customer.getPassword().trim().equals("") || customer.getPassword().contains(" ")) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
