@@ -203,4 +203,17 @@ public class AdminController {
         adminServiceOrder.save(order);
         return "redirect:/admin/order";
     }
+
+    @GetMapping("/getproductdetail/{id}")
+    public ModelAndView getProduct(@PathVariable int id) {
+        return new ModelAndView("/admin/ProductDetails", "productDetails", adminServiceOrder.OrderDetailProduct(id));
+    }
+    @PostMapping("/searchname")
+    public ModelAndView getSearchName(@RequestParam("nameproduct") String nameproduct) {
+        return new ModelAndView("/admin/TableProduct","list", adminService.SearchName(nameproduct));
+    }
+    @GetMapping("/sortproduct")
+    public ModelAndView getSearchName() {
+        return new ModelAndView("/admin/TableProduct","list", adminService.DESCPRODUCT());
+    }
 }

@@ -2,6 +2,7 @@ package hh.Service;
 
 import hh.Model.Customer;
 import hh.Model.Order;
+import hh.Model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,10 +67,10 @@ public class AdminService_Order implements IGenericService<Order, Integer> {
         }
 
         try {
-                CallableStatement callSt = conn.prepareCall("{call UpdateOrder(?,?)}");
-                callSt.setInt(1, order.getIdOrder());
-                callSt.setBoolean(2, order.isStatus());
-                callSt.executeUpdate();
+            CallableStatement callSt = conn.prepareCall("{call UpdateOrder(?,?)}");
+            callSt.setInt(1, order.getIdOrder());
+            callSt.setBoolean(2, order.isStatus());
+            callSt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -127,5 +128,51 @@ public class AdminService_Order implements IGenericService<Order, Integer> {
     @Override
     public void deleteById(Integer integer) {
 
+    }
+
+    public List<Product> OrderDetailProduct(Integer integer) {
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        List<Product> productList = new ArrayList<>();
+        try {
+            CallableStatement callSt = conn.prepareCall("{call OrderDetailProduct(?)}");
+            callSt.setInt(1, integer);
+            ResultSet rs = callSt.executeQuery();
+            while (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("id"));
+                p.setNameproduct(rs.getString("nameproduct"));
+                p.setImage(rs.getString("image"));
+                p.setVideo(rs.getString("video"));
+                p.setIdm_id(rs.getInt("idm_id"));
+                p.setPrice(rs.getFloat("price"));
+                p.setStock(rs.getInt("stock"));
+                p.setDate(rs.getDate("date"));
+                p.setDescription(rs.getString("description"));
+                p.setStatus(rs.getBoolean("status"));
+
+                if (p.getStock() <= 0) {
+                    p.setStatus(false);
+                }
+                productList.add(p);
+
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return productList;
     }
 }

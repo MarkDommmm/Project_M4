@@ -169,7 +169,7 @@
                                             <td th:text="${loop.count}"></td>
                                             <td th:text="${u.idOrder}"></td>
                                             <td >
-                                                <a href="#">Detail Products</a>
+                                                <a th:href="@{|/admin/getproductdetail/${u.idOrder}|}">Detail Products</a>
                                             </td>
                                             <td th:text="${u.name}"></td>
                                             <td th:text="${u.address}"></td>

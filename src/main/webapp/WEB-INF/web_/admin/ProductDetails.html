@@ -96,21 +96,9 @@
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top " id="navigation-example">
             <div class="container-fluid">
-                <div class="navbar-wrapper">
 
-                    <a class="navbar-brand" href="/admin/addProduct">
-                        <i class="fa-solid fa-plus"></i> Add Products</a>
-                </div>
                 <div class="collapse navbar-collapse justify-content-end">
-                    <form class="navbar-form" style="margin-right: 20px">
-                        <div class="input-group no-border">
-                            <input type="text" value="" class="form-control" placeholder="Search...">
-                            <button type="submit" class="btn btn-default btn-round btn-just-icon">
-                                <i class="material-icons">search</i>
-                                <div class="ripple-container"></div>
-                            </button>
-                        </div>
-                    </form>
+
                     <ul class="navbar-nav">
                         <div class="dropdown">
                             <th:block th:if="${session.currentLogin}">
@@ -139,60 +127,34 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header card-header-primary">
-                                <h4 class="card-title ">Table Products of Company</h4>
-                                <p class="card-category">Product import and export management</p>
+                                <h4 class="card-title ">Product details of order code!</h4>
+                                <p class="card-category">   </p>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead class=" text-primary">
-                                        <th>ID</th>
+                                        <th>STT</th>
                                         <th>Name</th>
-                                        <th>Image/</th>
-                                        <th>Stock</th>
+                                        <th>Image/Video</th>
                                         <th>Price</th>
                                         <th>Date</th>
                                         <th>Description</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="v,loop:${list}">
+                                        <tr th:each="v,loop:${productDetails}">
                                             <td th:text="${loop.count}"></td>
                                             <td th:text="${v.nameproduct}"></td>
-
                                             <td th:if="${v.video}">
                                                 <video th:src="@{|/upload/${v.video}|}" preload="auto" loop="" width="80px" autoplay muted></video>
-
                                             </td>
-
                                             <td th:unless="${v.video}">
                                                 <img th:src="@{|/upload/${v.image}|}" width="80px">
                                             </td>
-
-                                            <td th:text="${v.stock}"></td>
                                             <td class="text-primary" th:text="'$' + ${v.price}"></td>
                                             <td th:text="${v.date}"></td>
                                             <td th:text="${v.description}"></td>
-                                            <td>
-                                                <th:block th:if="${v.status == true}">
-                                                    <i class="fa-solid fa-check" style="color: greenyellow"> Stocking</i>
-                                                </th:block>
-                                                <th:block th:unless="${v.status== true}">
-                                                    <i class="fa-solid fa-xmark" style="color: red"> out of stock</i>
-                                                </th:block>
-                                            </td>
-                                            <td>
-                                                <a th:href="@{|/admin/update/${v.id}|}">
-                                                    <i class="fa-solid fa-pen-to-square"></i>
-                                                </a>
-                                                <a onclick="return confirm('do you want to delete this item ?')"
-                                                   th:href="@{|/admin/delete/${v.id}|}">
-                                                    <i class="fa-solid fa-trash-can"></i>
-                                                </a>
-                                            </td>
                                         </tr>
-
                                         </tbody>
                                     </table>
                                 </div>

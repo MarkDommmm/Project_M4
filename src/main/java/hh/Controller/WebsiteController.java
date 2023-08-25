@@ -53,6 +53,10 @@ public class WebsiteController {
             model.addAttribute("Error", "Please login again!!!");
             return "/web/login";
         }
+        if (c.isStatus() == false){
+            model.addAttribute("Error", "Account Block!!!");
+            return "/web/login";
+        }
         session.setAttribute("currentLogin", c);
         if (c.getRole() == 1) {
             return "redirect:/admin/home";
@@ -155,6 +159,7 @@ public class WebsiteController {
         cartService.addOrder(cartItems, order);
         return "redirect:/";
     }
+
 
 
 }

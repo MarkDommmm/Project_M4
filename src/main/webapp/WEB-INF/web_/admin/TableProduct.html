@@ -102,15 +102,17 @@
                         <i class="fa-solid fa-plus"></i> Add Products</a>
                 </div>
                 <div class="collapse navbar-collapse justify-content-end">
-                    <form class="navbar-form" style="margin-right: 20px">
+                    <form method="post" th:action="@{/admin/searchname}" class="navbar-form" style="margin-right: 20px">
                         <div class="input-group no-border">
-                            <input type="text" value="" class="form-control" placeholder="Search...">
+                            <input type="text" name="nameproduct" class="form-control" placeholder="Search...">
                             <button type="submit" class="btn btn-default btn-round btn-just-icon">
                                 <i class="material-icons">search</i>
                                 <div class="ripple-container"></div>
                             </button>
                         </div>
                     </form>
+
+                    <!--                    Login -->
                     <ul class="navbar-nav">
                         <div class="dropdown">
                             <th:block th:if="${session.currentLogin}">
@@ -153,6 +155,7 @@
                                         <th>Price</th>
                                         <th>Date</th>
                                         <th>Description</th>
+                                        <th>Status</th>
                                         <th>Actions</th>
                                         </thead>
                                         <tbody>
@@ -173,6 +176,14 @@
                                             <td class="text-primary" th:text="'$' + ${v.price}"></td>
                                             <td th:text="${v.date}"></td>
                                             <td th:text="${v.description}"></td>
+                                            <td>
+                                                <th:block th:if="${v.status == true}">
+                                                    <i class="fa-solid fa-check" style="color: greenyellow"> Stocking</i>
+                                                </th:block>
+                                                <th:block th:unless="${v.status== true}">
+                                                    <i class="fa-solid fa-xmark" style="color: red"> out of stock</i>
+                                                </th:block>
+                                            </td>
                                             <td>
                                                 <a th:href="@{|/admin/update/${v.id}|}">
                                                     <i class="fa-solid fa-pen-to-square"></i>
