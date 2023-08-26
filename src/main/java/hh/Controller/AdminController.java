@@ -1,9 +1,7 @@
 package hh.Controller;
 
-import hh.Model.Customer;
-import hh.Model.CustomerDto;
-import hh.Model.Product;
-import hh.Model.ProductDto;
+import hh.Model.*;
+import hh.Service.AdminService_Order;
 import hh.Service.AdminService_Product;
 
 import hh.Service.AdminService_User;
@@ -26,6 +24,8 @@ import java.util.List;
 @RequestMapping({"/admin"})
 @PropertySource("classpath:upload.properties")
 public class AdminController {
+    @Autowired
+    private AdminService_Order adminServiceOrder;
 
     @Autowired
     private AdminService_User adminServiceUser;
@@ -36,7 +36,7 @@ public class AdminController {
     @Autowired
     ServletContext context;
 
-    @Value("${pathUpload}")
+    @Value("C:\\Users\\Admin\\Desktop\\a\\ADMIN\\src\\main\\webapp\\WEB-INF\\upload\\")
     private String pathUpload;
 
     //    Điều hướng về home
@@ -125,14 +125,14 @@ public class AdminController {
         return "redirect:/admin/products";
     }
 
-// lấy tất cả User
+    // lấy tất cả User
     @GetMapping("/users")
     public String tableUser(Model model) {
         model.addAttribute("list", adminServiceUser.findall());
         return "/admin/TableUser";
     }
 
-//    // Thêm User
+    //    // Thêm User
     @GetMapping("/addUser")
     public ModelAndView addUser() {
         return new ModelAndView("/admin/addUser", "users", new Customer());
@@ -144,21 +144,17 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
-//    // END thêm User
+    //    // END thêm User
 ////    Xóa product
     @GetMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable("id") int id) {
         adminServiceUser.deleteById(id);
         return "redirect:/admin/users";
     }
-//
-//    //    Cập nhật User
+
+    //    //    Cập nhật User
     @GetMapping("/updateUser/{id}")
-    public ModelAndView updateUser(@PathVariable("id") int id,Model model) {
-        List<String> options = new ArrayList<>();
-        options.add("Active");
-        options.add("Inactive");
-        model.addAttribute("options", options);
+    public ModelAndView updateUser(@PathVariable("id") int id, Model model) {
         return new ModelAndView("/admin/updateUser", "UserUpdate", adminServiceUser.findById(id));
     }
 
@@ -189,5 +185,35 @@ public class AdminController {
 //        c.setStatus(customerDto.isStatus());
         adminServiceUser.save(customer);
         return "redirect:/admin/users";
+    }
+
+    @GetMapping("/order")
+    public ModelAndView getOrder() {
+        return new ModelAndView("/admin/TableOrders", "order", adminServiceOrder.findall());
+
+    }
+
+    @GetMapping("/editorder/{id}")
+    public ModelAndView getOrder(@PathVariable int id) {
+        return new ModelAndView("/admin/updateOrder", "orderedit", adminServiceOrder.findById(id));
+    }
+
+    @PostMapping("/editorder")
+    public String updateOrder(@ModelAttribute("orderedit") Order order) {
+        adminServiceOrder.save(order);
+        return "redirect:/admin/order";
+    }
+
+    @GetMapping("/getproductdetail/{id}")
+    public ModelAndView getProduct(@PathVariable int id) {
+        return new ModelAndView("/admin/ProductDetails", "productDetails", adminServiceOrder.OrderDetailProduct(id));
+    }
+    @PostMapping("/searchname")
+    public ModelAndView getSearchName(@RequestParam("nameproduct") String nameproduct) {
+        return new ModelAndView("/admin/TableProduct","list", adminService.SearchName(nameproduct));
+    }
+    @GetMapping("/sortproduct")
+    public ModelAndView getSearchName() {
+        return new ModelAndView("/admin/TableProduct","list", adminService.DESCPRODUCT());
     }
 }

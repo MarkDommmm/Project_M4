@@ -6,20 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" th:href="@{css/login.css}">
+
 </head>
 
 <body th:style="'background-image: url('+@{/imgg/lod-bg-193635e8f73f6a4b37f78991e113e894.png}+');'">
 <img class="banner" th:src="@{/imgg/TapeBanner_2000x.png}" alt="">
 <div class="login-box">
     <p id="form-title">Login</p>
-
+    <p th:text="${Error}" style="font-size:15px;color: red"> </p>
     <!-- Login Form -->
     <form id="login-form" th:action="@{/loginUser}" th:object="${users}" method="post">
-<!--        <div class="user-box">-->
-<!--            <input required="" name="" type="hidden" >-->
-<!--            <label th:text="${ErrorLogin}"></label>-->
-<!--        </div>-->
-        <p th:text="${ErrorLogin}" style="font-size:15px;color: red"></p>
+<!--        <p th:if="${#fields.hasErrors('username')}"   th:errors="*{username}" style="font-size:15px;color: red"></p>-->
+<!--        <p th:if="${#fields.hasErrors('password')}"  th:errors="*{password}" style="font-size:15px;color: red"></p>-->
+        <br>
         <div class="user-box">
             <input required="" name="" type="text" th:field="*{username}">
             <label>Email</label>
@@ -37,13 +36,13 @@
         </button>
     </form>
     <!-- Signup Form -->
-    <form id="signup-form" class="signup-form" th:action="@{/signup}" th:object="${users}" method="post">
+    <form id="signup-form" class="signup-form was-validated" th:action="@{/signup}" th:object="${users}" method="post">
             <div class="user-box">
-                <input name="username" min="8" type="text" th:field="*{username}">
+                <input name="username"  type="text" th:field="*{username}">
                 <label>Email</label>
              </div>
             <div class="user-box">
-                <input name="password" type="password"  min="8"  th:field="*{password}">
+                <input  name="password" type="password"     th:field="*{password}"  >
                 <label>Password</label>
             </div>
 <!--            <div class="user-box">-->
@@ -58,8 +57,9 @@
                 </a>
             </button>
     </form>
+
     <!-- Switch link -->
-    <p id="switch-link">Don't have an account? <a href="#" class="a2">Sign up!</a></p>
+    <p id="switch-link">Don't have an account? <a id="text_nav" href="#" class="a2">Sign up!</a></p>
 </div>
 <script>
     // JavaScript code to handle the switch
@@ -67,15 +67,18 @@
     const switchLink = document.getElementById('switch-link');
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
+    const text = document.getElementById('text_nav')
     const body = document.body;
-
     switchLink.addEventListener('click', () => {
         if (formTitle.textContent === 'Login') {
             formTitle.textContent = 'Sign Up';
             loginForm.style.display = 'none';
             signupForm.style.display = 'block';
             body.classList.add('show-signup-form');
+            text.textContent ='Login';
+
         } else {
+            text.textContent ='Sign up!'
             formTitle.textContent = 'Login';
             loginForm.style.display = 'block';
             signupForm.style.display = 'none';

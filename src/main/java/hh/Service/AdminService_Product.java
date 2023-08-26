@@ -33,11 +33,17 @@ public class AdminService_Product implements IGenericService<Product, Integer> {
                 p.setId(rs.getInt("id"));
                 p.setNameproduct(rs.getString("nameproduct"));
                 p.setImage(rs.getString("image"));
+                p.setVideo(rs.getString("video"));
+                p.setIdm_id(rs.getInt("idm_id"));
                 p.setPrice(rs.getFloat("price"));
                 p.setStock(rs.getInt("stock"));
                 p.setDate(rs.getDate("date"));
                 p.setDescription(rs.getString("description"));
                 p.setStatus(rs.getBoolean("status"));
+
+                if (p.getStock() <= 0){
+                    p.setStatus(false);
+                }
                 productList.add(p);
 
             }
@@ -64,7 +70,6 @@ public class AdminService_Product implements IGenericService<Product, Integer> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         try {
             if (product.getId() == 0) {
                 // thêm moi
@@ -165,5 +170,96 @@ public class AdminService_Product implements IGenericService<Product, Integer> {
                 }
             }
         }
+    }
+
+    public List<Product> SearchName(String searchName) {
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        List<Product> productList = new ArrayList<>();
+        try {
+            CallableStatement callSt = conn.prepareCall("{call SearchNameProduct(?)}");
+            callSt.setString(1, searchName);
+            ResultSet rs = callSt.executeQuery();
+            while (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("id"));
+                p.setNameproduct(rs.getString("nameproduct"));
+                p.setImage(rs.getString("image"));
+                p.setVideo(rs.getString("video"));
+                p.setIdm_id(rs.getInt("idm_id"));
+                p.setPrice(rs.getFloat("price"));
+                p.setStock(rs.getInt("stock"));
+                p.setDate(rs.getDate("date"));
+                p.setDescription(rs.getString("description"));
+                p.setStatus(rs.getBoolean("status"));
+
+                if (p.getStock() <= 0){
+                    p.setStatus(false);
+                }
+                productList.add(p);
+
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return productList;
+    }
+
+    public List<Product> DESCPRODUCT() {
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        List<Product> productList = new ArrayList<>();
+        try {
+            CallableStatement callSt = conn.prepareCall("{call DESCPRODUCT}");
+            ResultSet rs = callSt.executeQuery();
+            while (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("id"));
+                p.setNameproduct(rs.getString("nameproduct"));
+                p.setImage(rs.getString("image"));
+                p.setVideo(rs.getString("video"));
+                p.setIdm_id(rs.getInt("idm_id"));
+                p.setPrice(rs.getFloat("price"));
+                p.setStock(rs.getInt("stock"));
+                p.setDate(rs.getDate("date"));
+                p.setDescription(rs.getString("description"));
+                p.setStatus(rs.getBoolean("status"));
+
+                if (p.getStock() <= 0){
+                    p.setStatus(false);
+                }
+                productList.add(p);
+
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return productList;
     }
 }

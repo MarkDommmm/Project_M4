@@ -2,15 +2,20 @@ package hh.Config;
 
 import hh.Service.AdminService_Product;
 import hh.Service.AdminService_User;
+import hh.Service.CartService;
 import hh.Service.Validate;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -25,21 +30,13 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("hh.Controller")
-@PropertySource({"classpath:sourceDB.properties", "classpath:upload.properties"})
+@ComponentScan("hh")
+@PropertySource("classpath:sourceDB.properties")
 public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     private ApplicationContext applicationContext;
 
-    @Value("${pathUpload}")
+    @Value("C:\\Users\\Admin\\Desktop\\a\\ADMIN\\src\\main\\webapp\\WEB-INF\\upload\\")
     private String pathUpload;
-    @Value("${datasource-driver}")
-    private String driver;
-    @Value("${datasource-url}")
-    private String url;
-    @Value("${datasource-name}")
-    private String name;
-    @Value("${datasource-pass}")
-    private String pass;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -94,7 +91,8 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
 
                 );
     }
-    @Bean(name="multipartResolver")
+
+    @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
         multipartResolver.setMaxUploadSize(52428880);
@@ -104,20 +102,34 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(driver);
-        dataSource.setUrl(url);
-        dataSource.setUsername(name);
-        dataSource.setPassword(pass);
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/lord_water");
+        dataSource.setUsername("root");
+        dataSource.setPassword("123456");
         return dataSource;
     }
+
+//    @Bean
+//    public AdminService_Product adminServiceProduct() {
+//        return new AdminService_Product();
+//    }
+
     @Bean
-    public AdminService_Product adminServiceProduct(){
-        return  new AdminService_Product();
-     }
-    @Bean
-    public AdminService_User adminServiceUser(){
-        return  new AdminService_User();
+    public AdminService_User adminServiceUser() {
+        return new AdminService_User();
     }
+
     @Bean
-    public Validate validate (){ return  new Validate();}
+    public CartService cartService() {
+        return new CartService();
+    }
+
+//    @Bean
+//    public MessageSource messageSource() {
+//        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+//        messageSource.setBasenames("message");
+//        messageSource.setDefaultEncoding("UTF-8");
+//        return messageSource;
+//    }
+
 }
